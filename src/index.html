@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VS Code Online</title>
+    <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
+    <!-- <link rel="stylesheet" href="./font/iconfont.css"> -->
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1241290_3kibyic17k9.css">
+    <link rel="stylesheet" href="./assets/index.css">
+    <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/monaco-editor/0.17.0/min/vs/loader.js"></script>
+</head>
+
+<body>
+    <div class="app" id="app">
+        <div class="main">
+            <div class="tools">
+                <div class="top">
+                    <ul>
+                        <li><a title="代码" href="javascript:void(0)" class="iconfont icon-code active"></a></li>
+                    </ul>
+                </div>
+                <div class="bottom">
+                    <ul>
+                        <li><a title="设置" href="javascript:void(0)" class="iconfont icon-setting"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="left" id="left">
+                <div class="dir">
+                    <h2>文件管理</h2>
+                    <div class="path">
+                        当前目录:
+                        <a href="javascript:void(0);" @click="loadDir('/')">根目录/</a>
+                        <a href="javascript:void(0);" v-for="item in pathList"
+                            @click="loadDir(item.path)">{{item.title}}</a>
+                    </div>
+                    <div class="list">
+                        <ul>
+                            <li v-for="(dir, index) in files.dirs">
+                                <div class="title" @click="loadSubDir(dir)">
+                                    <span class="iconfont icon-folder"></span>
+                                    <span>{{dir}}</span>
+                                </div>
+                            </li>
+                            <li v-for="(file, index) in files.files">
+                                <div class="title" @click="openFile(file)">
+                                    <span class="iconfont icon-file"></span>
+                                    <span>{{file}}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="right" id="right">
+                <div class="tab">
+                    <ul>
+                        <li v-for="item in openFileList" @click="changeOpenFile(item)"
+                            :class="{active: currentOpenFile && item.path == currentOpenFile.path, change: item.change}">
+                            <span class="name">{{item.name}}</span>
+                            <span class="iconfont icon-close"></span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="editor">
+                    <div id="editor">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"></div>
+    </div>
+    <template id="readme">
+        这里是编辑器说明
+    </template>
+    <script src="./assets/index.js"></script>
+</body>
+
+</html>
