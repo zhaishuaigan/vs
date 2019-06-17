@@ -185,7 +185,11 @@ var vm = new Vue({
                         }
                     ],
                 })
-                .then(function () {
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
                     that.currentOpenFile.change = false;
                 })
                 .catch(function (e) {
