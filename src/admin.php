@@ -110,12 +110,12 @@ class Helper {
         $isBOM = checkBOM($path);
         if ($isBOM) {
             writeUTF8WithBOMFile($path, $conent);
-            return 1;
+            return 'ok';
         } else {
             file_put_contents($path, $conent);
-            return 1;
+            return 'ok';
         }
-        return 0;
+        return '保存文件失败!';
     }
 
     /**
@@ -129,6 +129,9 @@ class Helper {
         $path = $this->trimPath($path);
         if (file_exists($path)) {
             return '文件已存在!';
+        }
+        if (is_dir($path)) {
+            return '目录已存在!';
         }
         if (!is_dir(dirname($path))) {
             return '目录不存在';
@@ -150,6 +153,9 @@ class Helper {
         }
         if (is_dir($path)) {
             return '目录已存在!';
+        }
+        if (is_file($path)) {
+            return '文件已存在!';
         }
         mkdir($path);
         chmod($path, 0777);
@@ -216,7 +222,7 @@ class Helper {
         checkpath($path);
         $path = $this->baseDir . $path;
         $path = $this->trimPath($path);
-        return unlink($path);
+        return unlink($path) ? 'ok' : '删除文件失败!';
     }
 
     /**

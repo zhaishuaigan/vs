@@ -8,7 +8,7 @@
     <title>VS Code Online</title>
     <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
     <!-- <link rel="stylesheet" href="./font/iconfont.css"> -->
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1241290_3kibyic17k9.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1241290_wgr4ak3y0m.css">
     <link rel="stylesheet" href="./assets/index.css">
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
@@ -34,26 +34,37 @@
                 <div class="dir">
                     <h2>文件管理</h2>
                     <div class="path">
-                        当前目录:
                         <a href="javascript:void(0);" @click="loadDir('/')">根目录/</a>
                         <a href="javascript:void(0);" v-for="item in pathList"
-                            @click="loadDir(item.path)">{{item.title}}</a>
+                            @click="loadDir(item.path)">{{item.title}}/</a>
                     </div>
                     <div class="list">
-                        <ul>
-                            <li v-for="(dir, index) in files.dirs">
+                        <ul class="files">
+                            <li class="sub-dir" v-for="(dir, index) in files.dirs">
                                 <div class="title" @click="loadSubDir(dir)">
                                     <span class="iconfont icon-folder"></span>
                                     <span>{{dir}}</span>
                                 </div>
+                                <div class="action">
+                                    <span class="iconfont icon-rename" title="重命名" @click="onRenameDir(dir)"></span>
+                                    <span class="iconfont icon-delete" title="删除" @click="onDeleteDir(dir)"></span>
+                                </div>
                             </li>
-                            <li v-for="(file, index) in files.files">
+                            <li class="file" v-for="(file, index) in files.files">
                                 <div class="title" @click="openFile(file)">
                                     <span class="iconfont icon-file"></span>
                                     <span>{{file}}</span>
                                 </div>
+                                <div class="action">
+                                    <span class="iconfont icon-rename" title="重命名" @click="onRenameFile(file)"></span>
+                                    <span class="iconfont icon-delete" title="删除" @click="onDeleteFile(file)"></span>
+                                </div>
                             </li>
                         </ul>
+                        <div class="current-dir-action">
+                            <span class="iconfont icon-add-file" title="添加文件" @click="onAddFile()"></span>
+                            <span class="iconfont icon-add-folder" title="添加目录" @click="onAddDir()"></span>
+                        </div>
                     </div>
                 </div>
 
@@ -64,7 +75,7 @@
                         <li v-for="item in openFileList" @click="changeOpenFile(item)"
                             :class="{active: currentOpenFile && item.path == currentOpenFile.path, change: item.change}">
                             <span class="name">{{item.name}}</span>
-                            <span class="iconfont icon-close"></span>
+                            <span class="iconfont icon-close" @click.stop="closeFile(item)"></span>
                         </li>
                     </ul>
                 </div>

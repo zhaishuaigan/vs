@@ -29,11 +29,12 @@ var vm = new Vue({
             require.config({ paths: { 'vs': config.monaco.vs } });
             require(["vs/editor/editor.main"], function () {
                 that.editor = monaco.editor.create(document.getElementById('editor'), {
-                    value: document.getElementById('readme').innerHTML.trim(),
+                    value: '',
                     language: "markdown",
                     readOnly: true,
                     theme: config.monaco.theme
                 });
+                that.loadHelp();
 
                 that.editor.addAction({
                     id: 'save',
@@ -69,6 +70,13 @@ var vm = new Vue({
 
             });
         },
+        loadHelp: function () {
+            var help = document.getElementById('readme').innerHTML.trim();
+            this.editor.updateOptions({
+                readOnly: true
+            });
+            this.editor.setModel(monaco.editor.createModel(help, 'markdown'));
+        },
         loadDir: function (path) {
             var that = this;
             var pathArray = path.split('/');
@@ -95,15 +103,18 @@ var vm = new Vue({
                     console.log(e);
                 })
         },
-        loadSubDir: function (sub) {
-            var path = '/' + this.currentPath.join('/') + '/' + sub + '/';
+        getCurrentPath: function () {
+            var path = '/' + this.currentPath.join('/') + '/';
             path = path.replace('//', '/');
+            return path;
+        },
+        loadSubDir: function (sub) {
+            var path = this.getCurrentPath() + sub + '/';
             this.loadDir(path);
         },
         openFile: function (file) {
             var that = this;
-            var path = '/' + this.currentPath.join('/') + '/' + file;
-            path = path.replace('//', '/');
+            var path = this.getCurrentPath() + file;
 
             for (var i in this.openFileList) {
                 if (this.openFileList[i].path == path) {
@@ -133,16 +144,21 @@ var vm = new Vue({
                 })
         },
         changeOpenFile: function (item) {
+            if (!item) {
+                this.loadHelp();
+                return;
+            }
             this.currentOpenFile = item;
             this.editor.updateOptions({
                 readOnly: false
             });
-            // this.editor.setValue(item.content);
-
             var type = item.ext;
             switch (item.ext) {
                 case 'js':
                     type = 'javascript';
+                    break;
+                case 'md':
+                    type = 'markdown';
                     break;
             }
 
@@ -175,6 +191,145 @@ var vm = new Vue({
                 .catch(function (e) {
                     console.log(e);
                 })
+        },
+        closeFile: function (item) {
+            if (item.change) {
+                var ok = window.confirm('此文件有修改, 是否放弃修改?');
+                if (!ok) {
+                    return;
+                }
+            }
+            var newOpenFileList = [];
+            for (var i in this.openFileList) {
+                if (this.openFileList[i].path != item.path) {
+                    newOpenFileList.push(this.openFileList[i]);
+                }
+            }
+            this.openFileList = newOpenFileList;
+            if (this.currentOpenFile.path == item.path) {
+                if (newOpenFileList.length) {
+                    this.changeOpenFile(newOpenFileList[0]);
+                } else {
+                    this.changeOpenFile(null);
+                }
+            }
+
+        },
+        onAddDir: function () {
+            var that = this;
+            var path = window.prompt('请输入要创建的目录名: ', '');
+            if (!path.length) {
+                return;
+            }
+            path = this.getCurrentPath() + path;
+            axios.get(config.admin + '?act=newDir&path=' + path)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('创建目录出错:', e);
+                });
+        },
+        onRenameDir: function (dir) {
+            var that = this;
+            var oldPath = this.getCurrentPath() + dir;
+            var newPath = window.prompt('请输入要新的目录名: ', dir);
+            if (!path.length) {
+                return;
+            }
+            newPath = this.getCurrentPath() + newPath;
+            axios.get(config.admin + '?act=moveDir&path=' + oldPath + '&newPath=' + newPath)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('目录重命名出错:', e);
+                });
+        },
+        onDeleteDir: function (dir) {
+            var that = this;
+            var path = this.getCurrentPath() + dir;
+            var ok = window.confirm('确定要删除这个目录吗?');
+            if (!ok) {
+                return;
+            }
+            axios.get(config.admin + '?act=removeDir&path=' + path)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('删除目录出错:', e);
+                });
+        },
+        onAddFile: function () {
+            var that = this;
+            var path = window.prompt('请输入要创建的文件名: ', '');
+            if (!path.length) {
+                return;
+            }
+            path = this.getCurrentPath() + path;
+            axios.get(config.admin + '?act=newFile&path=' + path)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('创建文件出错:', e);
+                });
+        },
+        onRenameFile: function (file) {
+            var that = this;
+            var oldPath = this.getCurrentPath() + file;
+            var newPath = window.prompt('请输入要新的文件名: ', file);
+            if (!newPath.length) {
+                return;
+            }
+            newPath = this.getCurrentPath() + newPath;
+            axios.get(config.admin + '?act=moveFile&path=' + oldPath + '&newPath=' + newPath)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('文件重命名出错:', e);
+                });
+        },
+        onDeleteFile: function (file) {
+            var that = this;
+            var path = this.getCurrentPath() + file;
+            var ok = window.confirm('确定要删除这个文件吗?');
+            if (!ok) {
+                return;
+            }
+            axios.get(config.admin + '?act=removeFile&path=' + path)
+                .then(function (res) {
+                    if (res.data != 'ok') {
+                        alert(res.data);
+                        return;
+                    }
+                    that.loadDir(that.getCurrentPath());
+                })
+                .catch(function (e) {
+                    console.error('删除文件出错:', e);
+                });
         }
 
     }

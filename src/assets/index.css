@@ -88,41 +88,88 @@ html,body, .app{
     color: #8e8e8e;
     font-size: 12px;
     border-bottom: 1px solid #383838;
+    display: flex;
 }
 
 .left .dir .path a {
-    color: #fff;
+    color: #8e8e8e;
     text-decoration: none;
 }
 
-.left .dir ul{
+.left .dir .path a:hover {
+    color: #fff;
+}
+
+
+.left .dir .files{
     width: 100%;
     list-style: none;
     display: flex;
     flex-direction: column;
 }
 
-.left .dir ul li {
+.left .dir .files > li {
     color: #8e8e8e;
-    line-height: 35px;
     padding-left: 20px;
     font-size: 16px;
     line-height: 30px;
     margin-bottom: 2px;
+    position: relative;
 }
 
-.left .dir ul li .title {
+.left .dir .files > li .title {
     cursor: pointer;
 }
 
-.left .dir ul li .title:hover {
+.left .dir .files > li .title:hover {
     background: #2a2a2a;
 }
 
-.left .dir ul li .iconfont {
+.left .dir .files > li .iconfont {
     font-size: 16px;
 }
 
+.left .dir .files .action {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.left .dir .files .action {
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding-right: 10px;
+}
+
+.left .dir .files li .action span {
+    cursor: pointer;
+}
+
+.left .dir .files li:hover .action {
+    display: block;
+}
+
+.left .dir .list .current-dir-action{
+    text-align: center;
+    padding-top: 20px;
+}
+
+.left .dir .list .current-dir-action .iconfont{
+    line-height: 30px;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    color: #8e8e8e;
+    cursor: pointer;
+}
+
+.left .dir .list .current-dir-action .iconfont:hover{
+    color: #fff;
+    background: #6a6a6a;
+}
 
 .left .dir .null{
     font-size: 16px;
@@ -174,7 +221,7 @@ html,body, .app{
 }
 
 .tab ul li.change{
-    color: #f00;
+    color: #090;
 } 
 
 .tab ul li.active .icon-close,
