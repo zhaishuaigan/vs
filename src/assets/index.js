@@ -160,6 +160,9 @@ var vm = new Vue({
                 case 'md':
                     type = 'markdown';
                     break;
+                default:
+                    type = 'txt';
+                    break;
             }
 
             this.editor.setModel(monaco.editor.createModel(item.content, type));
