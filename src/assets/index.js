@@ -84,7 +84,6 @@ var vm = new Vue({
             that.pathList = [];
             for (var i in pathArray) {
                 if (pathArray[i].length) {
-                    console.log('pathArray[i]', pathArray[i]);
                     that.currentPath.push(pathArray[i]);
                     that.pathList.push({
                         title: pathArray[i],
@@ -92,8 +91,6 @@ var vm = new Vue({
                     });
                 }
             }
-
-            console.log('path', path);
 
             axios.get(config.admin + '?act=getDir&dir=' + path)
                 .then(function (res) {
@@ -124,8 +121,10 @@ var vm = new Vue({
             }
 
             var index = path.lastIndexOf(".");
-            var ext = path.substr(index + 1);
-            console.log(ext);
+            var ext = 'txt';
+            if (index != -1) {
+                ext = path.substr(index + 1);
+            }
 
             axios.get(config.admin + '?act=getFile&path=' + path)
                 .then(function (res) {
@@ -159,9 +158,6 @@ var vm = new Vue({
                     break;
                 case 'md':
                     type = 'markdown';
-                    break;
-                default:
-                    type = 'txt';
                     break;
             }
 

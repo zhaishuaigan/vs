@@ -72,7 +72,7 @@
             <div class="right" id="right">
                 <div class="tab">
                     <ul>
-                        <li v-for="item in openFileList" @click="changeOpenFile(item)"
+                        <li v-for="item in openFileList" @click="changeOpenFile(item)" @click.middle="closeFile(item)"
                             :class="{active: currentOpenFile && item.path == currentOpenFile.path, change: item.change}">
                             <span class="name">{{item.name}}</span>
                             <span class="iconfont icon-close" @click.stop="closeFile(item)"></span>
