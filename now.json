@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "name": "vs-code",
+    "alias": [
+        "vs-code"
+    ],
+    "builds": [
+        {
+            "src": "src/*.html",
+            "use": "@now/static"
+        },
+        {
+            "src": "src/assets/*",
+            "use": "@now/static"
+        },
+        {
+            "src": "*.php",
+            "use": "@now/php"
+        },
+        {
+            "src": "src/*.php",
+            "use": "@now/php"
+        }
+    ]
+}
