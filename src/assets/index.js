@@ -10,7 +10,7 @@ var vm = new Vue({
     el: '#app',
     data: function () {
         return {
-            leftWidth: 300,
+            admin: config.admin,
             editor: null,
             files: [],
             currentPath: [],

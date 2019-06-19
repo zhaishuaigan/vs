@@ -71,7 +71,7 @@
                 <div class="view-image" v-if="viewImage">
                     <h2>图片预览 <span class="iconfont icon-close" @click="viewImage = ''"></span></h2>
                     <div class="content">
-                        <img :src="viewImage" :alt="viewImage">
+                        <img :src="admin + '?act=getFile&path=' + viewImage" :alt="viewImage">
                     </div>
 
                 </div>
