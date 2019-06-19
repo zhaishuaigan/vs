@@ -88,7 +88,7 @@ html,body, .app{
     color: #8e8e8e;
     font-size: 12px;
     border-bottom: 1px solid #383838;
-    display: flex;
+    zoom: 1;
 }
 
 .left .dir .path a {
@@ -173,8 +173,46 @@ html,body, .app{
 
 .left .dir .null{
     font-size: 16px;
-    padding-left: 20px; 
+    padding-left: 20px;
+    
 }
+
+.left .view-image{
+    margin: 20px;
+    border: 1px solid #383838; 
+}
+
+.left .view-image h2 {
+    font-size: 12px;
+    color: #adadad;
+    line-height: 35px;
+    padding-left: 20px;
+    border-bottom: 1px solid #383838;
+    position: relative;
+}
+
+.left .view-image h2 .icon-close {
+    position: absolute;
+    font-size: 14px;
+    top: 0px;
+    right: 0px;
+    line-height: 35px;
+    padding: 0px 10px;
+}
+
+
+.left .view-image .content{
+    text-align: center;
+    margin: 20px;
+    color:#adadad; 
+    font-size: 12px;
+}
+
+.left .view-image .content img{
+    max-width: 80%;
+    border-radius: 5px;
+}
+
 
 .right{
     width: calc(100% - 300px);

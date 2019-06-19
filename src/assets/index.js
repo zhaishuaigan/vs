@@ -17,6 +17,7 @@ var vm = new Vue({
             pathList: [],
             openFileList: [],
             currentOpenFile: null,
+            viewImage: '',
         };
     },
     created: function () {
@@ -126,6 +127,20 @@ var vm = new Vue({
                 ext = path.substr(index + 1);
             }
 
+            switch (ext) {
+                case 'ico':
+                case 'icon':
+                case 'jpg':
+                case 'jpeg':
+                case 'gif':
+                case 'png':
+                case 'bmp':
+                    // 暂不支持编辑图片格式
+                    that.viewImage = path;
+                    return;
+                    break;
+            }
+
             axios.get(config.admin + '?act=getFile&path=' + path)
                 .then(function (res) {
                     var item = {
@@ -133,7 +148,7 @@ var vm = new Vue({
                         name: file,
                         ext: ext,
                         change: false,
-                        content: res.data
+                        content: res.request.responseText
                     };
                     that.openFileList.push(item);
                     that.changeOpenFile(item);

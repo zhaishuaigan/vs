@@ -36,7 +36,7 @@
                     <div class="path">
                         <a href="javascript:void(0);" @click="loadDir('/')">根目录/</a>
                         <a href="javascript:void(0);" v-for="item in pathList"
-                            @click="loadDir(item.path)">{{item.title}}/</a>
+                            @click="loadDir(item.path)">{{item.title}}/ </a>
                     </div>
                     <div class="list">
                         <ul class="files">
@@ -66,8 +66,15 @@
                             <span class="iconfont icon-add-folder" title="添加目录" @click="onAddDir()"></span>
                         </div>
                     </div>
-                </div>
 
+                </div>
+                <div class="view-image" v-if="viewImage">
+                    <h2>图片预览 <span class="iconfont icon-close" @click="viewImage = ''"></span></h2>
+                    <div class="content">
+                        <img :src="viewImage" :alt="viewImage">
+                    </div>
+
+                </div>
             </div>
             <div class="right" id="right">
                 <div class="tab">
