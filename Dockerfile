@@ -1,5 +1,6 @@
 FROM php:fpm-alpine
 COPY ./src/ /app/vs/
+COPY ./index.php /app/
 
 WORKDIR /app
 RUN apk add --no-cache nginx \
