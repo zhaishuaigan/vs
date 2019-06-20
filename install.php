@@ -23,6 +23,6 @@ $files = [
 
 foreach ($files as $file) {
     copy($remote . $file, $local . $file);
-    echo 'copy:' . $remote . $file .' -> ' . $local . $file . "\n";
+    echo 'download:' . $remote . $file .' -> ' . $local . $file . "\n";
 }
 echo 'install ok';

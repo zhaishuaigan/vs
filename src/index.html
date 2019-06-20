@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="left" id="left">
-                <div class="dir">
+                <div class="dir" ref="dir">
                     <h2>文件管理</h2>
                     <div class="path">
                         <a href="javascript:void(0);" @click="loadDir('/')">根目录/</a>
@@ -61,19 +61,34 @@
                                 </div>
                             </li>
                         </ul>
-                        <div class="current-dir-action">
-                            <span class="iconfont icon-add-file" title="添加文件" @click="onAddFile()"></span>
-                            <span class="iconfont icon-add-folder" title="添加目录" @click="onAddDir()"></span>
-                        </div>
                     </div>
-
+                    <div class="current-dir-action">
+                        <span class="iconfont icon-add-file" title="添加文件" @click="onAddFile()"></span>
+                        <span class="iconfont icon-add-folder" title="添加目录" @click="onAddDir()"></span>
+                    </div>
                 </div>
+                <div class="split"></div>
                 <div class="view-image" v-if="viewImage">
                     <h2>图片预览 <span class="iconfont icon-close" @click="viewImage = ''"></span></h2>
                     <div class="content">
                         <img :src="admin + '?act=getFile&path=' + viewImage" :alt="viewImage">
                     </div>
-
+                </div>
+                <div class="upload" v-if="currentUploadFile || uploadFileList.length">
+                    <h2>正在上传的文件</h2>
+                    <div class="content">
+                        <ul>
+                            <li class="current" v-if="currentUploadFile">
+                                <div class="progress" :style="{width: currentUploadFile.uploadProgress + '%'}"></div>
+                                <span class="name">{{currentUploadFile.name}}</span>
+                                <span class="iconfont icon-close"></span>
+                            </li>
+                            <li class="waiting" v-for="file in uploadFileList">
+                                <span class="name">{{file.name}}</span>
+                                <span class="iconfont icon-close"></span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="right" id="right">

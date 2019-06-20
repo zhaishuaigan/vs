@@ -18,11 +18,18 @@ var vm = new Vue({
             openFileList: [],
             currentOpenFile: null,
             viewImage: '',
+            // uploadFileList: [],
+            // currentUploadFile: null
+            uploadFileList: [],
+            currentUploadFile: null
         };
     },
     created: function () {
         this.createEditor();
         this.loadDir('/');
+    },
+    mounted: function () {
+        this.setDragFileUpload(this.$refs.dir);
     },
     methods: {
         createEditor: function () {
@@ -218,6 +225,9 @@ var vm = new Vue({
                 }
             }
             var newOpenFileList = [];
+            if (this.openFileList.length == 0) {
+                return;
+            }
             for (var i in this.openFileList) {
                 if (this.openFileList[i].path != item.path) {
                     newOpenFileList.push(this.openFileList[i]);
@@ -337,6 +347,10 @@ var vm = new Vue({
             if (!ok) {
                 return;
             }
+            this.closeFile({
+                path: path,
+                change: false
+            });
             axios.get(config.admin + '?act=removeFile&path=' + path)
                 .then(function (res) {
                     if (res.data != 'ok') {
@@ -347,6 +361,67 @@ var vm = new Vue({
                 })
                 .catch(function (e) {
                     console.error('删除文件出错:', e);
+                });
+        },
+        setDragFileUpload: function (box) {
+            box.ondragleave = (e) => {
+                e.preventDefault();  //阻止离开时的浏览器默认行为
+            };
+            box.ondrop = (e) => {
+                e.preventDefault();    //阻止拖放后的浏览器默认行为
+                const data = e.dataTransfer.files;  // 获取文件对象
+                if (data.length < 1) {
+                    return;  // 检测是否有文件拖拽到页面     
+                }
+                for (let i = 0; i < e.dataTransfer.files.length; i++) {
+                    e.dataTransfer.files[i].path = this.getCurrentPath();
+                    this.uploadFileList.push(e.dataTransfer.files[i]);
+                }
+                this.uploadTask();
+            };
+            box.ondragenter = (e) => {
+                e.preventDefault();  //阻止拖入时的浏览器默认行为
+            };
+            box.ondragover = (e) => {
+                e.preventDefault();    //阻止拖来拖去的浏览器默认行为
+            };
+        },
+        uploadTask: function () {
+            if (this.currentUploadFile || this.uploadFileList.length == 0) {
+                return;
+            }
+            this.uploadFile(this.uploadFileList.shift());
+
+        },
+        uploadFile: function (file) {
+            this.currentUploadFile = {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+                lastModified: file.lastModified,
+                uploadProgress: 0
+            };
+            let param = new FormData();
+            param.append("path", file.path);
+            param.append("file", file);
+
+            let config = {
+                //添加请求头
+                headers: { "Content-Type": "multipart/form-data" },
+                //添加上传进度监听事件
+                onUploadProgress: e => {
+                    this.currentUploadFile.uploadProgress = ((e.loaded / e.total * 100) | 0);
+                }
+            };
+            axios.post(this.admin + '?act=uploadFile', param, config)
+                .then((res) => {
+                    // console.log(res);
+                    this.currentUploadFile = null;
+                    this.loadDir(this.getCurrentPath());
+                    this.uploadTask();
+                })
+                .catch(function (e) {
+                    console.log(e);
                 });
         }
 
