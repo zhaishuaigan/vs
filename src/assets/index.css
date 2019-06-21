@@ -83,7 +83,6 @@ html,body, .app {
 }
 
 
-
 .left {
     width: calc(300px);
     background: #252525;
@@ -97,12 +96,16 @@ html,body, .app {
     flex-direction: column;
     flex: 1;
 }
+.left .dir.drag-file {
+    background: #383838;
+}
 
 .left .dir .list {
     overflow-y: auto;
     border-bottom: 1px solid #383838;
     flex: 1;
 }
+
 
 .left .dir h2 {
     font-size: 12px;

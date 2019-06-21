@@ -18,10 +18,9 @@ var vm = new Vue({
             openFileList: [],
             currentOpenFile: null,
             viewImage: '',
-            // uploadFileList: [],
-            // currentUploadFile: null
             uploadFileList: [],
-            currentUploadFile: null
+            currentUploadFile: null,
+            dragFile: false
         };
     },
     created: function () {
@@ -365,25 +364,29 @@ var vm = new Vue({
         },
         setDragFileUpload: function (box) {
             box.ondragleave = (e) => {
-                e.preventDefault();  //阻止离开时的浏览器默认行为
+                e.preventDefault();
+                this.dragFile = false;
             };
             box.ondrop = (e) => {
-                e.preventDefault();    //阻止拖放后的浏览器默认行为
-                const data = e.dataTransfer.files;  // 获取文件对象
+                e.preventDefault();
+                this.dragFile = false;
+                const data = e.dataTransfer.files;
                 if (data.length < 1) {
-                    return;  // 检测是否有文件拖拽到页面     
+                    return;
                 }
                 for (let i = 0; i < e.dataTransfer.files.length; i++) {
+                    e.dataTransfer.files[i].id = Math.random();
                     e.dataTransfer.files[i].path = this.getCurrentPath();
                     this.uploadFileList.push(e.dataTransfer.files[i]);
                 }
                 this.uploadTask();
             };
             box.ondragenter = (e) => {
-                e.preventDefault();  //阻止拖入时的浏览器默认行为
+                e.preventDefault();
             };
             box.ondragover = (e) => {
-                e.preventDefault();    //阻止拖来拖去的浏览器默认行为
+                e.preventDefault();
+                this.dragFile = true;
             };
         },
         uploadTask: function () {
@@ -423,6 +426,18 @@ var vm = new Vue({
                 .catch(function (e) {
                     console.log(e);
                 });
+        },
+        removeUploadFile: function (file) {
+            var newList = [];
+            for (var i in this.uploadFileList) {
+                if (this.uploadFileList[i].id != file.id) {
+                    newList.push(this.uploadFileList[i]);
+                }
+            }
+            this.uploadFileList = newList;
+        },
+        cancleCurrentUpload: function () {
+            alert('暂时不支持取消');
         }
 
     }

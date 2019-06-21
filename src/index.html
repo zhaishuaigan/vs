@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div class="left" id="left">
-                <div class="dir" ref="dir">
+                <div class="dir" ref="dir" :class="{'drag-file': dragFile}">
                     <h2>文件管理</h2>
                     <div class="path">
                         <a href="javascript:void(0);" @click="loadDir('/')">根目录/</a>
@@ -81,11 +81,11 @@
                             <li class="current" v-if="currentUploadFile">
                                 <div class="progress" :style="{width: currentUploadFile.uploadProgress + '%'}"></div>
                                 <span class="name">{{currentUploadFile.name}}</span>
-                                <span class="iconfont icon-close"></span>
+                                <span class="iconfont icon-close" @click="cancleCurrentUpload()"></span>
                             </li>
                             <li class="waiting" v-for="file in uploadFileList">
                                 <span class="name">{{file.name}}</span>
-                                <span class="iconfont icon-close"></span>
+                                <span class="iconfont icon-close" @click="removeUploadFile(file)"></span>
                             </li>
                         </ul>
                     </div>

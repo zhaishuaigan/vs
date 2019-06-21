@@ -1,19 +1,20 @@
 FROM php:fpm-alpine
-COPY ./src/ /app/vs/
-COPY ./index.php /app/
 
-WORKDIR /app
 RUN apk add --no-cache nginx \
     && mkdir /run/nginx \
-    && chown -R www-data:www-data /app \
-    && chmod -R 777 /app
+    && mkdir /app \
+    && chown -R www-data:www-data /app
+
 
 COPY ./default.conf /etc/nginx/conf.d/default.conf
 COPY ./php.ini /usr/local/etc/php/php.ini
+COPY ./index.php /app/
+COPY ./src/ /app/vs/
+
+WORKDIR /app
 
 EXPOSE 80
-# Persistent config file and cache
-VOLUME [ "/app"]
+
 
 CMD php-fpm & \
     nginx -g "daemon off;"
