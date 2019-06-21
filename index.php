@@ -1,3 +1,3 @@
 <script>
-location = '/vs';
+    location.href = '/vs/';
 </script>

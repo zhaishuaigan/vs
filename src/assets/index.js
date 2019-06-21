@@ -438,6 +438,9 @@ var vm = new Vue({
         },
         cancleCurrentUpload: function () {
             alert('暂时不支持取消');
+        },
+        onDownloadFile: function (file) {
+            window.open(this.admin + '?act=download&path=' + this.getCurrentPath() + file);
         }
 
     }

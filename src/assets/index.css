@@ -40,8 +40,8 @@ html,body, .app {
 } 
 
 .main .tools,
-.main .left,
-.main .right {
+.main > .left,
+.main > .right {
     height: 100%;
 }
 
@@ -83,31 +83,31 @@ html,body, .app {
 }
 
 
-.left {
+.main > .left {
     width: calc(300px);
     background: #252525;
     display: flex;
     flex-direction: column;
 }
 
-.left .dir {
+.main > .left .dir {
     overflow: hidden;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
-.left .dir.drag-file {
+.main > .left .dir.drag-file {
     background: #383838;
 }
 
-.left .dir .list {
+.main > .left .dir .list {
     overflow-y: auto;
     border-bottom: 1px solid #383838;
     flex: 1;
 }
 
 
-.left .dir h2 {
+.main > .left .dir h2 {
     font-size: 12px;
     color: #adadad;
     line-height: 35px;
@@ -115,7 +115,7 @@ html,body, .app {
     border-bottom: 1px solid #383838;
 }
 
-.left .dir .path {
+.main > .left .dir .path {
     line-height: 26px;
     padding: 0px 10px;
     color: #8e8e8e;
@@ -124,24 +124,24 @@ html,body, .app {
     zoom: 1;
 }
 
-.left .dir .path a {
+.main > .left .dir .path a {
     color: #8e8e8e;
     text-decoration: none;
 }
 
-.left .dir .path a:hover {
+.main > .left .dir .path a:hover {
     color: #fff;
 }
 
 
-.left .dir .files {
+.main > .left .dir .files {
     width: 100%;
     list-style: none;
     display: flex;
     flex-direction: column;
 }
 
-.left .dir .files > li {
+.main > .left .dir .files > li {
     color: #8e8e8e;
     padding-left: 20px;
     font-size: 16px;
@@ -150,25 +150,25 @@ html,body, .app {
     position: relative;
 }
 
-.left .dir .files > li .title {
+.main > .left .dir .files > li .title {
     cursor: pointer;
 }
 
-.left .dir .files > li .title:hover {
+.main > .left .dir .files > li .title:hover {
     background: #2a2a2a;
 }
 
-.left .dir .files > li .iconfont {
+.main > .left .dir .files > li .iconfont {
     font-size: 16px;
 }
 
-.left .dir .files .action {
+.main > .left .dir .files .action {
     position: absolute;
     top: 0px;
     right: 0px;
 }
 
-.left .dir .files .action {
+.main > .left .dir .files .action {
     display: none;
     position: absolute;
     top: 0px;
@@ -176,20 +176,20 @@ html,body, .app {
     padding-right: 10px;
 }
 
-.left .dir .files li .action span {
+.main > .left .dir .files li .action span {
     cursor: pointer;
 }
 
-.left .dir .files li:hover .action {
+.main > .left .dir .files li:hover .action {
     display: block;
 }
 
-.left .dir .current-dir-action {
+.main > .left .dir .current-dir-action {
     text-align: center;
     padding: 20px;
 }
 
-.left .dir .current-dir-action .iconfont {
+.main > .left .dir .current-dir-action .iconfont {
     line-height: 30px;
     font-size: 16px;
     padding: 10px;
@@ -199,23 +199,23 @@ html,body, .app {
     cursor: pointer;
 }
 
-.left .dir .current-dir-action .iconfont:hover {
+.main > .left .dir .current-dir-action .iconfont:hover {
     color: #fff;
     background: #6a6a6a;
 }
 
-.left .dir .null{
+.main > .left .dir .null{
     font-size: 16px;
     padding-left: 20px;
     
 }
 
-.left .view-image{
+.main > .left .view-image{
     margin: 20px;
     border: 1px solid #383838; 
 }
 
-.left .view-image h2 {
+.main > .left .view-image h2 {
     font-size: 12px;
     color: #adadad;
     line-height: 35px;
@@ -224,7 +224,7 @@ html,body, .app {
     position: relative;
 }
 
-.left .view-image h2 .icon-close {
+.main > .left .view-image h2 .icon-close {
     position: absolute;
     font-size: 14px;
     top: 0px;
@@ -234,25 +234,25 @@ html,body, .app {
 }
 
 
-.left .view-image .content{
+.main > .left .view-image .content{
     text-align: center;
     margin: 20px;
     color:#adadad; 
     font-size: 12px;
 }
 
-.left .view-image .content img{
+.main > .left .view-image .content img{
     max-width: 80%;
     border-radius: 5px;
 }
 
 
-.left .upload{
+.main > .left .upload{
     margin: 20px;
     border: 1px solid #383838;
 }
 
-.left .upload h2 {
+.main > .left .upload h2 {
     font-size: 12px;
     color: #adadad;
     line-height: 35px;
@@ -261,16 +261,16 @@ html,body, .app {
     position: relative;
 }
 
-.left .upload .content {
+.main > .left .upload .content {
     max-height: 170px;
     overflow-y: auto;
 }
 
-.left .upload ul {
+.main > .left .upload ul {
     list-style: none;
 }
 
-.left .upload ul li {
+.main > .left .upload ul li {
     position: relative;
     font-size: 14px;
     height: 34px;
@@ -280,17 +280,17 @@ html,body, .app {
     border-bottom: 1px solid #383838;
 }
 
-.left .upload ul li:last-child {
+.main > .left .upload ul li:last-child {
     border-bottom: 0px;
 }
 
-.left .upload ul li .icon-close {
+.main > .left .upload ul li .icon-close {
     position: absolute;
     top: 0px;
     right: 10px;
 }
 
-.left .upload .progress {
+.main > .left .upload .progress {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -298,7 +298,7 @@ html,body, .app {
     height: 100%;
     background: #007acc;
 }
-.left .upload .name {
+.main > .left .upload .name {
     display: block;
     white-space: nowrap;
     position: absolute;

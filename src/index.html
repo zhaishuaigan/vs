@@ -7,8 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>VS Code Online</title>
     <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="./font/iconfont.css"> -->
-    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1241290_wgr4ak3y0m.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/font_1241290_5gcuhh8ru.css">
     <link rel="stylesheet" href="./assets/index.css">
     <script src="https://cdn.bootcss.com/vue/2.6.10/vue.min.js"></script>
     <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
@@ -57,6 +56,7 @@
                                 </div>
                                 <div class="action">
                                     <span class="iconfont icon-rename" title="重命名" @click="onRenameFile(file)"></span>
+                                    <span class="iconfont icon-download" title="下载文件" @click="onDownloadFile(file)"></span>
                                     <span class="iconfont icon-delete" title="删除" @click="onDeleteFile(file)"></span>
                                 </div>
                             </li>

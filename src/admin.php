@@ -53,9 +53,14 @@ switch ($act) {
         echo json_encode($ide->uploadFile('file', I('path')));
         break;
 
+    case 'download':
+        $ide->download(I('path'));
+        break;
+
     case 'zipextract':
         echo $ide->zipextract(I('zip'), I('to'));
         break;
+
     default:
         echo '操作不存在!';
         break;
@@ -304,6 +309,27 @@ class Helper {
             chmod($path . $_FILES[$fileElementName]['name'], 0777);
         }
         return array('error' => $error, 'msg' => $msg);
+    }
+    
+    /**
+     * 作用: 下载文件
+     * @param string $path 文件路径
+     */
+    public function download($path) {
+        $path = $this->baseDir . $path;
+        $filename = basename($path);
+        if (!file_exists($path)) {    
+            header('HTTP/1.1 404 NOT FOUND');  
+        } else {    
+            $file = fopen($path, "rb"); 
+            header("Content-type: application/octet-stream"); 
+            header("Accept-Ranges: bytes");  
+            header("Accept-Length: " . filesize ($path));  
+            header("Content-Disposition: attachment; filename=" . $filename);    
+            echo fread($file, filesize($path));    
+            fclose($file);    
+            exit();    
+        }    
     }
 
     /**
