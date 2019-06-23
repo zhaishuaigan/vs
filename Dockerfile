@@ -1,16 +1,12 @@
-FROM php:fpm-alpine
+FROM php:7.2-apache
 
-RUN apk add --no-cache nginx && mkdir /run/nginx
+ENV APACHE_DOCUMENT_ROOT /app
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-COPY ./default.conf /etc/nginx/conf.d/default.conf
-COPY ./php.ini /usr/local/etc/php/php.ini
 COPY ./index.php /app/index.php
 COPY ./src/ /app/vs/
 
-RUN chown -R www-data:www-data /app
+RUN chmod -R 777 /app
 
 WORKDIR /app
-
-EXPOSE 80
-
-CMD php-fpm & nginx -g "daemon off;"

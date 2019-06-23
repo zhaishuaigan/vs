@@ -127,32 +127,11 @@ var vm = new Vue({
                 }
             }
 
-            var index = path.lastIndexOf(".");
-            var ext = 'txt';
-            if (index != -1) {
-                ext = path.substr(index + 1);
-            }
-
-            switch (ext) {
-                case 'ico':
-                case 'icon':
-                case 'jpg':
-                case 'jpeg':
-                case 'gif':
-                case 'png':
-                case 'bmp':
-                    // 暂不支持编辑图片格式
-                    that.viewImage = path;
-                    return;
-                    break;
-            }
-
             axios.get(config.admin + '?act=getFile&path=' + path)
                 .then(function (res) {
                     var item = {
                         path: path,
                         name: file,
-                        ext: ext,
                         change: false,
                         content: res.request.responseText
                     };
@@ -163,6 +142,14 @@ var vm = new Vue({
                     console.log(e);
                 })
         },
+        getFileExt: function (path) {
+            var index = path.lastIndexOf(".");
+            var ext = 'txt';
+            if (index != -1) {
+                ext = path.substr(index + 1);
+            }
+            return ext;
+        },
         changeOpenFile: function (item) {
             if (!item) {
                 this.loadHelp();
@@ -172,7 +159,24 @@ var vm = new Vue({
             this.editor.updateOptions({
                 readOnly: false
             });
-            var type = item.ext;
+
+            var ext = this.getFileExt(item.path);
+            var type = ext;
+
+            switch (ext) {
+                case 'ico':
+                case 'icon':
+                case 'jpg':
+                case 'jpeg':
+                case 'gif':
+                case 'png':
+                case 'bmp':
+                    // 如果是图片格式, 就预览图片
+                    that.viewImage = path;
+                    return;
+                    break;
+            }
+
             switch (item.ext) {
                 case 'js':
                     type = 'javascript';
@@ -245,7 +249,7 @@ var vm = new Vue({
         onAddDir: function () {
             var that = this;
             var path = window.prompt('请输入要创建的目录名: ', '');
-            if (!path.length) {
+            if (path === null || path.length == 0) {
                 return;
             }
             path = this.getCurrentPath() + path;
@@ -265,7 +269,7 @@ var vm = new Vue({
             var that = this;
             var oldPath = this.getCurrentPath() + dir;
             var newPath = window.prompt('请输入要新的目录名: ', dir);
-            if (!path.length) {
+            if (path === null || path.length == 0) {
                 return;
             }
             newPath = this.getCurrentPath() + newPath;
@@ -303,7 +307,7 @@ var vm = new Vue({
         onAddFile: function () {
             var that = this;
             var path = window.prompt('请输入要创建的文件名: ', '');
-            if (!path.length) {
+            if (path === null || path.length == 0) {
                 return;
             }
             path = this.getCurrentPath() + path;
@@ -319,11 +323,31 @@ var vm = new Vue({
                     console.error('创建文件出错:', e);
                 });
         },
+        isOpen: function (path) {
+            for (var i in this.openFileList) {
+                if (this.openFileList[i].path == path) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        renameOpenFile: function (path, newPath) {
+            for (var i in this.openFileList) {
+                if (this.openFileList[i].path == path) {
+                    this.openFileList[i].path = newPath;
+                    this.openFileList[i].name = newPath.replace(/.*\//, '');
+                    break;
+                }
+            }
+            if (this.currentOpenFile && this.currentOpenFile.path == newPath) {
+                this.changeOpenFile(this.currentOpenFile);
+            }
+        },
         onRenameFile: function (file) {
             var that = this;
             var oldPath = this.getCurrentPath() + file;
             var newPath = window.prompt('请输入要新的文件名: ', file);
-            if (!newPath.length) {
+            if (newPath === null || newPath.length == 0) {
                 return;
             }
             newPath = this.getCurrentPath() + newPath;
@@ -332,6 +356,9 @@ var vm = new Vue({
                     if (res.data != 'ok') {
                         alert(res.data);
                         return;
+                    }
+                    if (that.isOpen(oldPath)) {
+                        that.renameOpenFile(oldPath, newPath);
                     }
                     that.loadDir(that.getCurrentPath());
                 })
@@ -409,9 +436,7 @@ var vm = new Vue({
             param.append("file", file);
 
             let config = {
-                //添加请求头
                 headers: { "Content-Type": "multipart/form-data" },
-                //添加上传进度监听事件
                 onUploadProgress: e => {
                     this.currentUploadFile.uploadProgress = ((e.loaded / e.total * 100) | 0);
                 }
