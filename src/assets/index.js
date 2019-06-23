@@ -172,18 +172,18 @@ var vm = new Vue({
                 case 'png':
                 case 'bmp':
                     // 如果是图片格式, 就预览图片
-                    that.viewImage = path;
+                    this.viewImage = item.path;
                     return;
                     break;
             }
 
-            switch (item.ext) {
-                case 'js':
-                    type = 'javascript';
-                    break;
-                case 'md':
-                    type = 'markdown';
-                    break;
+            switch (ext) {
+                case 'js': type = 'javascript'; break;
+                case 'md': type = 'markdown'; break;
+                case 'php': type = 'php'; break;
+                case 'py': type = 'python'; break;
+                case 'cs': type = 'csharp'; break;
+                case 'java': type = 'java'; break;
             }
 
             this.editor.setModel(monaco.editor.createModel(item.content, type));
@@ -317,7 +317,9 @@ var vm = new Vue({
                         alert(res.data);
                         return;
                     }
+
                     that.loadDir(that.getCurrentPath());
+                    that.openFile(path.replace(/.*\//, ''));
                 })
                 .catch(function (e) {
                     console.error('创建文件出错:', e);
