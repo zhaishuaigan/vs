@@ -55,9 +55,9 @@
                                     <span>{{file}}</span>
                                 </div>
                                 <div class="action">
-                                    <span class="iconfont icon-rename" title="重命名" @click="onRenameFile(file)"></span>
-                                    <span class="iconfont icon-download" title="下载文件" @click="onDownloadFile(file)"></span>
-                                    <span class="iconfont icon-delete" title="删除" @click="onDeleteFile(file)"></span>
+                                    <span class="iconfont icon-rename" title="重命名" @click.stop="onRenameFile(file)"></span>
+                                    <span class="iconfont icon-download" title="下载文件" @click.stop="onDownloadFile(file)"></span>
+                                    <span class="iconfont icon-delete" title="删除" @click.stop="onDeleteFile(file)"></span>
                                 </div>
                             </li>
                         </ul>

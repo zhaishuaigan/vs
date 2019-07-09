@@ -116,9 +116,29 @@ var vm = new Vue({
             var path = this.getCurrentPath() + sub + '/';
             this.loadDir(path);
         },
+        isImage: function (path) {
+            var ext = this.getFileExt(path);
+            switch (ext) {
+                case 'ico':
+                case 'icon':
+                case 'jpg':
+                case 'jpeg':
+                case 'gif':
+                case 'png':
+                case 'bmp':
+                    return true;
+                    break;
+            }
+            return false;
+        },
         openFile: function (file) {
             var that = this;
             var path = this.getCurrentPath() + file;
+
+            if (this.isImage(file)) {
+                this.viewImage = path;
+                return;
+            }
 
             for (var i in this.openFileList) {
                 if (this.openFileList[i].path == path) {
@@ -163,18 +183,9 @@ var vm = new Vue({
             var ext = this.getFileExt(item.path);
             var type = ext;
 
-            switch (ext) {
-                case 'ico':
-                case 'icon':
-                case 'jpg':
-                case 'jpeg':
-                case 'gif':
-                case 'png':
-                case 'bmp':
-                    // 如果是图片格式, 就预览图片
-                    this.viewImage = item.path;
-                    return;
-                    break;
+            if (this.isImage(item.path)) {
+                this.viewImage = item.path;
+                return;
             }
 
             switch (ext) {
